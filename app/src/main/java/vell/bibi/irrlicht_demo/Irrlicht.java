@@ -25,34 +25,28 @@ public class Irrlicht implements SurfaceHolder.Callback {
     }
 
     public void init() {
-        // 初始化
-        int inited = nativeInitGL(context.getAssets(), surfaceView.getHolder().getSurface(), surfaceView.getWidth(), surfaceView.getHeight());
-        Log.i(TAG, "Irrlicht init: " + inited);
-        if (inited == 1) {
-            thread = new HandlerThread("IrrlichtThread");
-            thread.start();
-            recordHandler = new Handler(thread.getLooper());
-            recordHandler.post(new Runnable() {
-                @Override
-                public void run() {
+        thread = new HandlerThread("IrrlichtThread");
+        thread.start();
+        recordHandler = new Handler(thread.getLooper());
+        recordHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                // 初始化
+                int inited = nativeInitGL(context.getAssets(), surfaceView.getHolder().getSurface(), surfaceView.getWidth(), surfaceView.getHeight());
+                Log.i(TAG, "Irrlicht init: " + inited);
+                if (inited == 1) {
                     while (true) {
                         synchronized (surfaceView) {
                             if (destroy) {
                                 break;
                             }
-                        }
-                        try {
                             nativeDrawFrame();
-                            Thread.sleep(40);
-                        } catch (InterruptedException e) {
-                            Log.d(TAG,
-                                    "Sleep interrupted: " + e.getMessage());
                         }
-
                     }
                 }
-            });
-        }
+            }
+        });
+
     }
 
     @Override
@@ -62,12 +56,7 @@ public class Irrlicht implements SurfaceHolder.Callback {
     @Override
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
         Log.i(TAG, "Irrlicht surfaceChanged: " + width + "," + height);
-        ((Activity) context).runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                init();
-            }
-        });
+        init();
     }
 
     @Override

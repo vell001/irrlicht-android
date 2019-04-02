@@ -12,7 +12,6 @@ cmake_minimum_required(VERSION 3.4.1)
 
 include_directories(Irrlicht/include)
 include_directories(native_app_glue)
-include_directories(IrrlichtAndroid)
 set(jnilibs "${CMAKE_CURRENT_SOURCE_DIR}/../jniLibs")
 
 add_library(native_app_glue STATIC IMPORTED)
@@ -21,7 +20,7 @@ set_target_properties(native_app_glue PROPERTIES IMPORTED_LOCATION "${jnilibs}/$
 add_library(Irrlicht STATIC IMPORTED)
 set_target_properties(Irrlicht PROPERTIES IMPORTED_LOCATION "${jnilibs}/${ANDROID_ABI}/libIrrlicht.a")
 
-file(GLOB src *.cpp IrrlichtAndroid/*.cpp)
+file(GLOB src *.cpp)
 
 add_library( # Sets the name of the library.
         native-lib

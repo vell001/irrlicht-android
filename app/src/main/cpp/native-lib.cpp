@@ -308,6 +308,9 @@ void android_main(android_app *app) {
     /* Set the font-size depending on your device.
        dpi=dots per inch. 1 inch = 2.54 cm. */
     IGUISkin *skin = guienv->getSkin();
+    video::SColor color = skin->getColor(EGDC_WINDOW);
+    color.setAlpha(150);
+    skin->setColor(EGDC_WINDOW, color);
     IGUIFont *font = 0;
     if (displayMetrics.xdpi <
         100)    // just guessing some value where fontsize might start to get too small
@@ -402,10 +405,9 @@ Java_vell_bibi_irrlicht_1demo_Irrlicht_nativeInitGL(JNIEnv *env, jobject instanc
         SIrrlichtCreationParameters p;
         p.DriverType = video::EDT_OGLES2;
         p.WindowSize = dimension2d<u32>(static_cast<const u32 &>(w), static_cast<const u32 &>(h));
-        p.Bits = (u8) 16;
+        p.Bits = 24;
+        p.ZBufferBits = 16;
         p.Fullscreen = false;
-        p.Stencilbuffer = false;
-        p.Vsync = false;
         p.EventReceiver = 0;
         p.PrivateData = (void *) &app;
         ANativeActivity nativeActivity;
@@ -417,25 +419,47 @@ Java_vell_bibi_irrlicht_1demo_Irrlicht_nativeInitGL(JNIEnv *env, jobject instanc
             if (driver) {
                 smgr = device->getSceneManager();
                 guienv = device->getGUIEnvironment();
+                IFileSystem *fs = device->getFileSystem();
+
+                IGUISkin *skin = guienv->getSkin();
+                video::SColor color = skin->getColor(EGDC_WINDOW);
+                color.setAlpha(150);
+                skin->setColor(EGDC_WINDOW, color);
+
                 /*
                     Add a 3d model. Note that you might need to add light when using other models.
                     A copy of the model and it's textures must be inside the assets folder to be installed to Android.
                     In this example we do copy it to the assets folder in the Makefile jni/Android.mk
                 */
                 stringc mediaPath = "media/";
+
+                // The Android assets file-system does not know which sub-directories it has (blame google).
+                // So we have to add all sub-directories in assets manually. Otherwise we could still open the files,
+                // but existFile checks will fail (which are for example needed by getFont).
+                for (u32 i = 0; i < fs->getFileArchiveCount(); ++i) {
+                    IFileArchive *archive = fs->getFileArchive(i);
+                    if (archive->getType() == EFAT_ANDROID_ASSET) {
+                        archive->addDirectoryToFileList(mediaPath);
+                        break;
+                    }
+                }
+
                 IAnimatedMesh *mesh = smgr->getMesh(mediaPath + "dwarf.x");
                 if (!mesh) {
                     device->closeDevice();
                     device->drop();
                     return 0;
                 }
-                smgr->addAnimatedMeshSceneNode(mesh);
-
+                IAnimatedMeshSceneNode *node = smgr->addAnimatedMeshSceneNode(mesh);
+                if (node) {
+                    node->setMaterialFlag(EMF_LIGHTING, false);
+                    node->setMD2Animation(scene::EMAT_STAND);
+                }
 
                 /*
                 To look at the mesh, we place a camera.
                 */
-                smgr->addCameraSceneNode(0, vector3df(15, 40, -90), vector3df(0, 30, 0));
+                smgr->addCameraSceneNode(0, vector3df(5, 40, -90), vector3df(0, 30, 0));
                 return 1;
             }
         }
@@ -446,11 +470,12 @@ Java_vell_bibi_irrlicht_1demo_Irrlicht_nativeInitGL(JNIEnv *env, jobject instanc
 extern "C"
 JNIEXPORT void JNICALL
 Java_vell_bibi_irrlicht_1demo_Irrlicht_nativeDrawFrame(JNIEnv *env, jobject instance) {
-    if (device) {
-        device->getVideoDriver()->beginScene(true, true, SColor(0, 100, 100, 100));
+    if (device && device->run()) {
+        device->getVideoDriver()->beginScene(true, true, SColor(0, 0, 0, 0));
         device->getSceneManager()->drawAll();
         device->getGUIEnvironment()->drawAll();
         device->getVideoDriver()->endScene();
         device->yield(); // probably nicer to the battery
+        __android_log_print(ANDROID_LOG_ERROR, "test", "nativeDrawFrame");
     }
 }

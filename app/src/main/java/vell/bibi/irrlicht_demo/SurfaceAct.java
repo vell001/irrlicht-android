@@ -1,6 +1,7 @@
 package vell.bibi.irrlicht_demo;
 
 import android.app.Activity;
+import android.graphics.PixelFormat;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.SurfaceView;
@@ -13,6 +14,8 @@ public class SurfaceAct extends Activity {
         setContentView(R.layout.surface_act);
         ViewGroup container = findViewById(R.id.container);
         SurfaceView surfaceView = findViewById(R.id.surface_view);
+        surfaceView.setZOrderOnTop(true);
+        surfaceView.getHolder().setFormat(PixelFormat.TRANSLUCENT);
         final Irrlicht irrlicht = new Irrlicht(this, surfaceView);
 
     }
