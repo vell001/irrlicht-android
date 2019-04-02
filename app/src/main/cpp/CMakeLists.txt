@@ -12,6 +12,7 @@ cmake_minimum_required(VERSION 3.4.1)
 
 include_directories(Irrlicht/include)
 include_directories(native_app_glue)
+include_directories(IrrlichtAndroid)
 set(jnilibs "${CMAKE_CURRENT_SOURCE_DIR}/../jniLibs")
 
 add_library(native_app_glue STATIC IMPORTED)
@@ -20,6 +21,8 @@ set_target_properties(native_app_glue PROPERTIES IMPORTED_LOCATION "${jnilibs}/$
 add_library(Irrlicht STATIC IMPORTED)
 set_target_properties(Irrlicht PROPERTIES IMPORTED_LOCATION "${jnilibs}/${ANDROID_ABI}/libIrrlicht.a")
 
+file(GLOB src *.cpp IrrlichtAndroid/*.cpp)
+
 add_library( # Sets the name of the library.
         native-lib
 
@@ -27,8 +30,7 @@ add_library( # Sets the name of the library.
         SHARED
 
         # Provides a relative path to your source file(s).
-        native-lib.cpp
-        android_tools.cpp)
+        ${src})
 
 # Searches for a specified prebuilt library and stores the path as a
 # variable. Because CMake includes system libraries in the search path by
