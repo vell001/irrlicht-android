@@ -6,6 +6,7 @@
 #include "android/window.h"
 #include <android/native_window_jni.h>
 #include <android/looper.h>
+#include "SplineNode.hpp"
 
 using namespace irr;
 using namespace core;
@@ -102,12 +103,14 @@ Java_vell_bibi_irrlicht_1demo_Irrlicht_nativeInitGL(JNIEnv *env, jobject instanc
                 S3DVertex *v = static_cast<S3DVertex *>(mesh->getMeshBuffer(0)->getVertices());
 
                 for (int i = 0; i < mesh->getMeshBuffer(0)->getVertexCount(); i++) {
-                    v[i].Color.set(200, 0, 0, 255);
+                    v[i].Color.set(100, 255, 255, 255);
                 }
+
 
                 IAnimatedMeshSceneNode *node = smgr->addAnimatedMeshSceneNode(mesh);
                 if (node) {
                     node->setMaterialFlag(EMF_LIGHTING, false);
+                    node->setMaterialType(EMT_TRANSPARENT_ALPHA_CHANNEL);
                     node->setMD2Animation(scene::EMAT_STAND);
 //                    node->addAnimator(smgr->createFlyCircleAnimator(vector3df(0, 0, 0), 1.0));
 
@@ -121,6 +124,33 @@ Java_vell_bibi_irrlicht_1demo_Irrlicht_nativeInitGL(JNIEnv *env, jobject instanc
                     node->addAnimator(
                             smgr->createRotationAnimator(vector3df(0.3f, 0.3f, 0.3f)));
                     node->setScale(vector3df(1.3f, 1.0f, 1.0f));
+                }
+
+//                ISceneNode *splineNode = new SplineNode(smgr->getRootSceneNode(), smgr, 666, vector3df(0, 0, 0),
+//                                                        vector3df(0, 0, 0), vector3df(0, 0, 0));
+                ISceneNode *splineNode = new SplineNode(smgr->getRootSceneNode(), smgr, -1,
+                                                        vector3df(0, 0, 0),
+                                                        vector3df(0, 0, 0),
+                                                        vector3df(2.0f, 2.0f, 2.0f));
+//                driver->setTextureCreationFlag(ETCF_ALWAYS_32_BIT);
+                ITexture *texture = driver->getTexture(mediaPath + "earth.jpg");
+//                driver->makeColorKeyTexture(texture,position2di(0,0));
+                splineNode->setMaterialTexture(0, texture);
+//                texture->drop();
+                scene::ISceneNodeAnimator *anim =
+                        smgr->createRotationAnimator(core::vector3df(0.8f, 0.8f, 0.8f));
+
+                if (anim) {
+//                    splineNode->addAnimator(anim);
+
+                    /*
+                    I'm done referring to anim, so must
+                    irr::IReferenceCounted::drop() this reference now because it
+                    was produced by a createFoo() function. As I shouldn't refer to
+                    it again, ensure that I can't by setting to 0.
+                    */
+                    anim->drop();
+                    anim = 0;
                 }
 
 //                smgr->addLightSceneNode(0, vector3df(1, 1, 1));
