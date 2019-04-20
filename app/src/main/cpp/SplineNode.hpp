@@ -4,6 +4,7 @@
 #pragma once
 
 #include <irrlicht.h>
+#include "SplineUtils.h"
 
 using namespace irr;
 using namespace core;
@@ -22,37 +23,45 @@ public:
         material.Wireframe = false;
         material.Lighting = false;
         material.Thickness = 0.f;
-//        material.MaterialType = EMT_TRANSPARENT_ALPHA_CHANNEL;
-        material.MaterialType = EMT_TRANSPARENT_VERTEX_ALPHA;
+        material.MaterialType = EMT_TRANSPARENT_ALPHA_CHANNEL;
+//        material.MaterialType = EMT_TRANSPARENT_VERTEX_ALPHA;
 
-        vertices.push_back(S3DVertex(0, 0, 0, 0, 0, -1,
-                                     SColor(255, 0, 255, 255), 0, 0));
-        vertices.push_back(S3DVertex(1, 0, 0, 0, 0, -1,
-                                     SColor(100, 0, 255, 255), 0, 1));
-        vertices.push_back(S3DVertex(0, 1, 0, 0, 0, -1,
-                                     SColor(100, 0, 255, 255), 0.5, 0));
-        vertices.push_back(S3DVertex(1, 1, 0, 0, 0, -1,
-                                     SColor(100, 0, 255, 255), 0.5, 1));
-        vertices.push_back(S3DVertex(0, 2, 0, 0, 0, -1,
-                                     SColor(100, 0, 255, 255), 1, 0));
-        vertices.push_back(S3DVertex(1, 2, 0, 0, 0, -1,
-                                     SColor(255, 0, 255, 255), 1, 1));
-
-        indices.push_back(0);
-        indices.push_back(2);
-        indices.push_back(1);
-
-        indices.push_back(1);
-        indices.push_back(2);
-        indices.push_back(3);
-
-        indices.push_back(3);
-        indices.push_back(2);
-        indices.push_back(4);
-
-        indices.push_back(4);
-        indices.push_back(5);
-        indices.push_back(3);
+        array<vector3df> keyPoints;
+        keyPoints.push_back(vector3df(0, 0, 0));
+        keyPoints.push_back(vector3df(0, 3, 0));
+        keyPoints.push_back(vector3df(6, 3, 0));
+        keyPoints.push_back(vector3df(5, 9, 0));
+        keyPoints.push_back(vector3df(4, 7, 0));
+        keyPoints.push_back(vector3df(0, -10, 0));
+        genVertices(vertices, indices, keyPoints);
+//        vertices.push_back(S3DVertex(0, 0, 0, 0, 0, -1,
+//                                     SColor(255, 0, 255, 255), 0, 0));
+//        vertices.push_back(S3DVertex(1, 0, 0, 0, 0, -1,
+//                                     SColor(100, 0, 255, 255), 0, 1));
+//        vertices.push_back(S3DVertex(0, 1, 0, 0, 0, -1,
+//                                     SColor(100, 0, 255, 255), 0.5, 0));
+//        vertices.push_back(S3DVertex(1, 1, 0, 0, 0, -1,
+//                                     SColor(100, 0, 255, 255), 0.5, 1));
+//        vertices.push_back(S3DVertex(0, 2, 0, 0, 0, -1,
+//                                     SColor(100, 0, 255, 255), 1, 0));
+//        vertices.push_back(S3DVertex(1, 2, 0, 0, 0, -1,
+//                                     SColor(255, 0, 255, 255), 1, 1));
+//
+//        indices.push_back(0);
+//        indices.push_back(2);
+//        indices.push_back(1);
+//
+//        indices.push_back(1);
+//        indices.push_back(2);
+//        indices.push_back(3);
+//
+//        indices.push_back(3);
+//        indices.push_back(2);
+//        indices.push_back(4);
+//
+//        indices.push_back(4);
+//        indices.push_back(5);
+//        indices.push_back(3);
 
         box.reset(vertices[0].Pos);
         for (s32 i = 1; i < vertices.size(); ++i)

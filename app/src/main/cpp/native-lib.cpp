@@ -133,7 +133,7 @@ Java_vell_bibi_irrlicht_1demo_Irrlicht_nativeInitGL(JNIEnv *env, jobject instanc
                                                         vector3df(0, 0, 0),
                                                         vector3df(2.0f, 2.0f, 2.0f));
 //                driver->setTextureCreationFlag(ETCF_ALWAYS_32_BIT);
-                ITexture *texture = driver->getTexture(mediaPath + "earth.jpg");
+                ITexture *texture = driver->getTexture(mediaPath + "spline.psd");
 //                driver->makeColorKeyTexture(texture,position2di(0,0));
                 splineNode->setMaterialTexture(0, texture);
 //                texture->drop();
@@ -158,7 +158,7 @@ Java_vell_bibi_irrlicht_1demo_Irrlicht_nativeInitGL(JNIEnv *env, jobject instanc
                 /*
                 To look at the mesh, we place a camera.
                 */
-                smgr->addCameraSceneNode(0, vector3df(0, 0, -6), vector3df(0, 0, 0));
+                smgr->addCameraSceneNode(0, vector3df(0, 0, -36), vector3df(0, 0, 0));
                 return 1;
             }
         }
