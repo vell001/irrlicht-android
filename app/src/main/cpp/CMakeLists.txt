@@ -12,6 +12,9 @@ cmake_minimum_required(VERSION 3.4.1)
 
 include_directories(Irrlicht/include)
 include_directories(native_app_glue)
+
+add_subdirectory(libtess2)
+
 set(jnilibs "${CMAKE_CURRENT_SOURCE_DIR}/../jniLibs")
 
 add_library(native_app_glue STATIC IMPORTED)
@@ -60,4 +63,5 @@ target_link_libraries( # Specifies the target library.
         GLESv1_CM
         GLESv2
         Irrlicht
+        libtess2
         )

@@ -63,8 +63,8 @@ CIrrDeviceAndroid::CIrrDeviceAndroid(const SIrrlichtCreationParameters& param)
 
 	if (CreationParams.WindowSize.Width == 0 || CreationParams.WindowSize.Height == 0)
     {
-        CreationParams.WindowSize.Width = ANativeWindow_getWidth(Android->window);
-        CreationParams.WindowSize.Height = ANativeWindow_getHeight(Android->window);
+        CreationParams.WindowSize.Width = (u32)ANativeWindow_getWidth(Android->window);
+        CreationParams.WindowSize.Height = (u32)ANativeWindow_getHeight(Android->window);
     }
 
     ContextManager->initialize(CreationParams, ExposedVideoData);
@@ -74,7 +74,7 @@ CIrrDeviceAndroid::CIrrDeviceAndroid(const SIrrlichtCreationParameters& param)
 
     if (!Initialized)
     {
-        io::CAndroidAssetFileArchive* assets = new io::CAndroidAssetFileArchive( Android->activity->assetManager, false, false);
+		auto * assets = new io::CAndroidAssetFileArchive( Android->activity->assetManager, false, false);
         assets->addDirectoryToFileList("");
         FileSystem->addFileArchive(assets);
         assets->drop();

@@ -7,6 +7,7 @@
 #include <android/native_window_jni.h>
 #include <android/looper.h>
 #include "SplineNode.hpp"
+#include "TessNode.hpp"
 
 using namespace irr;
 using namespace core;
@@ -139,7 +140,11 @@ Java_vell_bibi_irrlicht_1demo_Irrlicht_nativeInitGL(JNIEnv *env, jobject instanc
 //                texture->drop();
                 scene::ISceneNodeAnimator *anim =
                         smgr->createRotationAnimator(core::vector3df(0.8f, 0.8f, 0.8f));
-
+                TessNode *tessNode = new TessNode(smgr->getRootSceneNode(), smgr, -1,
+                                                  vector3df(0, 0, 0),
+                                                  vector3df(0, 0, 0),
+                                                  vector3df(1.0f, 1.0f, 1.0f));
+                tessNode->drop();
                 if (anim) {
 //                    splineNode->addAnimator(anim);
 
