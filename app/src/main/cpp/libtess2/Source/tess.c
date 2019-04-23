@@ -630,7 +630,7 @@ TESStesselator* tessNewTess( TESSalloc* alloc )
 	tess->bmax[1] = 0;
 
 	tess->reverseContours = 0;
-    
+
 	tess->windingRule = TESS_WINDING_ODD;
 	tess->processCDT = 0;
 
@@ -916,7 +916,7 @@ void OutputContours( TESStesselator *tess, TESSmesh *mesh, int vertexSize )
 void tessAddContour( TESStesselator *tess, int size, const void* vertices,
 					int stride, int numVertices )
 {
-    const TESSreal*src = (const TESSreal*)vertices;
+	const unsigned char *src = (const unsigned char*)vertices;
 	TESShalfEdge *e;
 	int i;
 
@@ -936,7 +936,7 @@ void tessAddContour( TESStesselator *tess, int size, const void* vertices,
 
 	for( i = 0; i < numVertices; ++i )
 	{
-		const TESSreal* coords = src;
+		const TESSreal* coords = (const TESSreal*)src;
 		src += stride;
 
 		if( e == NULL ) {

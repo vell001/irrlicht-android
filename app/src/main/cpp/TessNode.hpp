@@ -33,30 +33,34 @@ public:
 //        keyPoints.push_back(vector3df(5, 9, 0));
 //        keyPoints.push_back(vector3df(4, 7, 0));
 //        keyPoints.push_back(vector3df(0, -10, 0));
-        TESSreal contour[] = {0, 0, 0,
-                              6, 0, 0,
-                              6, 6, 0,
-                              0, 6, 0
+        TESSreal contour[] = {0, 0, 1,
+                              6, 0, 1,
+                              6, 6, 1,
+                              0, 6, 1
         };
-//        TESSreal contour2[] = {2, 2, 0,
-//                               4, 2, 0,
-//                               4, 4, 0,
-//                               2, 4, 0
-//        };
+        TESSreal contour2[] = {2, 2, 1,
+                               4, 2, 1,
+                               4, 4, 1,
+                               2, 4, 1
+        };
         TESStesselator *tess = tessNewTess(nullptr);
-        tessAddContour(tess, 3, contour, 3, 4);
-//        tessAddContour(tess, 3, contour2, 3, 4);
+        tessAddContour(tess, 3, contour, 12, 4);
+        tessAddContour(tess, 3, contour2, 12, 4);
         tessTesselate(tess, TESS_WINDING_ODD, TESS_POLYGONS, 3, 3, nullptr);
         int vertexCount = tessGetVertexCount(tess);
         const TESSreal *tessVertices = tessGetVertices(tess);
-        for (int i = 0; i < vertexCount; i += 3) {
-            vertices.push_back(
-                    S3DVertex(tessVertices[i], tessVertices[i + 1], tessVertices[i + 2], 0, 0, -1,
-                              SColor(255, 255, 255, 255), 0, 0));
-        }
-        const TESSindex *tessVertexIndices = tessGetVertexIndices(tess);
         for (int i = 0; i < vertexCount; i++) {
-            indices.push_back((u16) tessVertexIndices[i]);
+            vertices.push_back(S3DVertex(tessVertices[i * 3],
+                                         tessVertices[i * 3 + 1],
+                                         tessVertices[i * 3 + 2],
+                                         0, 0, -1,
+                                         SColor(255, 255, 255, 255), 0, 0));
+        }
+
+        int elementCount = tessGetElementCount(tess);
+        const int *elements = tessGetElements(tess);
+        for (int i = elementCount * 3 - 1; i >= 0; i--) {
+            indices.push_back((u16) elements[i]);
         }
 
         tessDeleteTess(tess);
