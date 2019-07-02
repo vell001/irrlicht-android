@@ -15,6 +15,7 @@ android {
         externalNativeBuild {
             cmake {
                 cppFlags "-Wall -pipe -fno-exceptions -fno-rtti -fstrict-aliasing"
+                targets "Irrlicht"
             }
         }
         ndk {

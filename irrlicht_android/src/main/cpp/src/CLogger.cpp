@@ -43,7 +43,7 @@ namespace irr
 				return;
 		}
 
-		os::Printer::print(text);
+		os::Printer::print(text, ll);
 	}
 
 

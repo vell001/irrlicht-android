@@ -12,9 +12,14 @@ include_directories(src
         )
 
 
+find_library(
+        log-lib
+        log)
+
+
 add_library(
         Irrlicht
-        SHARED
+        STATIC
         src/Android/native_app_glue/android_native_app_glue.c
         src/Android/CIrrDeviceAndroid.cpp
         src/Android/CAndroidAssetReader.cpp
@@ -341,10 +346,6 @@ add_library(
         src/zlib/inftrees.c
         src/zlib/uncompr.c
 )
-
-find_library(
-        log-lib
-        log)
 
 target_link_libraries(
         Irrlicht
