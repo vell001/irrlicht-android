@@ -2,12 +2,12 @@
 #include <string>
 #include <irrlicht.h>
 #include <android/log.h>
-#include "android_tools.h"
 #include "android/window.h"
 #include <android/native_window_jni.h>
 #include <android/looper.h>
 #include "SplineNode.hpp"
 #include "TessNode.hpp"
+#include <android_native_app_glue.h>
 
 using namespace irr;
 using namespace core;

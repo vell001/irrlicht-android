@@ -58,6 +58,4 @@ build
 .externalNativeBuild
 
 .idea
-gradle/
-gradle*
 log

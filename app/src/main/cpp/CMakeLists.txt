@@ -11,14 +11,13 @@ cmake_minimum_required(VERSION 3.4.1)
 # Gradle automatically packages shared libraries with your APK.
 
 include_directories(Irrlicht/include)
-include_directories(native_app_glue)
 
 add_subdirectory(libtess2)
 
 set(jnilibs "${CMAKE_CURRENT_SOURCE_DIR}/../jniLibs")
 
-add_library(native_app_glue STATIC IMPORTED)
-set_target_properties(native_app_glue PROPERTIES IMPORTED_LOCATION "${jnilibs}/${ANDROID_ABI}/libandroid_native_app_glue.a")
+#add_library(native_app_glue STATIC IMPORTED)
+#set_target_properties(native_app_glue PROPERTIES IMPORTED_LOCATION "${jnilibs}/${ANDROID_ABI}/libandroid_native_app_glue.a")
 
 add_library(Irrlicht STATIC IMPORTED)
 set_target_properties(Irrlicht PROPERTIES IMPORTED_LOCATION "${jnilibs}/${ANDROID_ABI}/libIrrlicht.a")
@@ -58,7 +57,6 @@ target_link_libraries( # Specifies the target library.
         # included in the NDK.
         ${log-lib}
         android
-        native_app_glue
         EGL
         GLESv1_CM
         GLESv2
