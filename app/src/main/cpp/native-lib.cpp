@@ -81,7 +81,7 @@ Java_vell_bibi_irrlicht_1demo_Irrlicht_nativeInitGL(JNIEnv *env, jobject instanc
                     A copy of the model and it's textures must be inside the assets folder to be installed to Android.
                     In this example we do copy it to the assets folder in the Makefile jni/Android.mk
                 */
-                stringc mediaPath = "media/";
+                stringc mediaPath = "irrlicht_media/";
 
                 // The Android assets file-system does not know which sub-directories it has (blame google).
                 // So we have to add all sub-directories in assets manually. Otherwise we could still open the files,
